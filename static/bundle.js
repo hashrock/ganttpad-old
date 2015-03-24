@@ -2,15 +2,12 @@
 var Vue = require("vue");
 var d3 = require("d3");
 
-new Vue({
-    el: "#main",
-    data: {
-        textData: "test 2015-03-20 2015-03-24\r\ntest2 2015-03-19 2015-03-22"
-    },
+Vue.component("gantt", {
+    template: "<div class='ganttGraph'>",
     ready: function(){
         var self = this;
         var margin = {top: 20, right: 20, bottom: 30, left: 20},
-            width = parseInt(d3.select("#graph").style("width"), 10) - margin.left - margin.right,
+            width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
 
         //初期表示範囲設定
@@ -81,8 +78,8 @@ new Vue({
 
             //タスクのラベル表示
             text.text(function (item) {
-                    return item.name
-                })
+                return item.name
+            })
                 .attr("text-anchor", "end")
                 .attr("x", function (item) {
                     return xScale(item.start) - 10
@@ -101,7 +98,7 @@ new Vue({
             });
 
         //SVG生成
-        var svg = d3.select("#graph").append("svg")
+        var svg = d3.select(".ganttGraph").append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
@@ -119,6 +116,23 @@ new Vue({
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
 
+        this.$watch("tasks", function(tasks){
+            update(tasks);
+        }, false, true);
+    }
+});
+},{"d3":3,"vue":64}],2:[function(require,module,exports){
+var Vue = require("vue");
+require("./gantt.js");
+
+new Vue({
+    el: "#main",
+    data: {
+        textData: "test 2014-12-20 2014-12-24\r\ntest2 2014-12-19 2014-12-22",
+        tasks: []
+    },
+    ready: function(){
+        var self = this;
         this.$watch("textData", function(textData){
             self.tasks = textData.split(/\r|\n|\r\n/).map(function(line){
                 var args = line.split(" ");
@@ -131,14 +145,10 @@ new Vue({
                 }
                 return null;
             }).filter(function(item){return item});
-            update(self.tasks);
         }, false, true);
-
     }
 });
-
-
-},{"d3":2,"vue":63}],2:[function(require,module,exports){
+},{"./gantt.js":1,"vue":64}],3:[function(require,module,exports){
 !function() {
   var d3 = {
     version: "3.5.5"
@@ -9643,7 +9653,7 @@ new Vue({
   if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
   this.d3 = d3;
 }();
-},{}],3:[function(require,module,exports){
+},{}],4:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -9691,7 +9701,7 @@ exports.$addChild = function (opts, BaseCtor) {
   this._children.push(child)
   return child
 }
-},{"../util":60}],4:[function(require,module,exports){
+},{"../util":61}],5:[function(require,module,exports){
 var _ = require('../util')
 var Watcher = require('../watcher')
 var Path = require('../parsers/path')
@@ -9856,7 +9866,7 @@ exports.$log = function (path) {
   }
   console.log(data)
 }
-},{"../parsers/directive":48,"../parsers/expression":49,"../parsers/path":50,"../parsers/text":52,"../util":60,"../watcher":64}],5:[function(require,module,exports){
+},{"../parsers/directive":49,"../parsers/expression":50,"../parsers/path":51,"../parsers/text":53,"../util":61,"../watcher":65}],6:[function(require,module,exports){
 var _ = require('../util')
 var transition = require('../transition')
 
@@ -10068,7 +10078,7 @@ function remove (el, vm, cb) {
   _.remove(el)
   if (cb) cb()
 }
-},{"../transition":54,"../util":60}],6:[function(require,module,exports){
+},{"../transition":55,"../util":61}],7:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -10243,7 +10253,7 @@ function modifyListenerCount (vm, event, count) {
     parent = parent.$parent
   }
 }
-},{"../util":60}],7:[function(require,module,exports){
+},{"../util":61}],8:[function(require,module,exports){
 var _ = require('../util')
 var mergeOptions = require('../util/merge-option')
 
@@ -10390,7 +10400,7 @@ function createAssetRegisters (Constructor) {
 }
 
 createAssetRegisters(exports)
-},{"../compiler/compile":11,"../compiler/transclude":12,"../config":13,"../parsers/directive":48,"../parsers/expression":49,"../parsers/path":50,"../parsers/template":51,"../parsers/text":52,"../util":60,"../util/merge-option":62}],8:[function(require,module,exports){
+},{"../compiler/compile":12,"../compiler/transclude":13,"../config":14,"../parsers/directive":49,"../parsers/expression":50,"../parsers/path":51,"../parsers/template":52,"../parsers/text":53,"../util":61,"../util/merge-option":63}],9:[function(require,module,exports){
 var _ = require('../util')
 var compile = require('../compiler/compile')
 
@@ -10463,7 +10473,7 @@ exports.$destroy = function (remove, deferCleanup) {
 exports.$compile = function (el) {
   return compile(el, this.$options, true)(this, el)
 }
-},{"../compiler/compile":11,"../util":60}],9:[function(require,module,exports){
+},{"../compiler/compile":12,"../util":61}],10:[function(require,module,exports){
 var _ = require('./util')
 var MAX_UPDATE_COUNT = 10
 
@@ -10558,7 +10568,7 @@ exports.push = function (job) {
     }
   }
 }
-},{"./util":60}],10:[function(require,module,exports){
+},{"./util":61}],11:[function(require,module,exports){
 /**
  * A doubly linked list-based Least Recently Used (LRU)
  * cache. Will keep most recently used items while
@@ -10671,7 +10681,7 @@ p.get = function (key, returnEntry) {
 }
 
 module.exports = Cache
-},{}],11:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 var _ = require('../util')
 var config = require('../config')
 var textParser = require('../parsers/text')
@@ -11236,7 +11246,7 @@ function directiveComparator (a, b) {
   b = b.def.priority || 0
   return a > b ? 1 : -1
 }
-},{"../config":13,"../parsers/directive":48,"../parsers/template":51,"../parsers/text":52,"../util":60}],12:[function(require,module,exports){
+},{"../config":14,"../parsers/directive":49,"../parsers/template":52,"../parsers/text":53,"../util":61}],13:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 
@@ -11386,7 +11396,7 @@ function insertContentAt (outlet, contents) {
   }
   parent.removeChild(outlet)
 }
-},{"../parsers/template":51,"../util":60}],13:[function(require,module,exports){
+},{"../parsers/template":52,"../util":61}],14:[function(require,module,exports){
 module.exports = {
 
   /**
@@ -11473,7 +11483,7 @@ Object.defineProperty(module.exports, 'delimiters', {
     this._delimitersChanged = true
   }
 })
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var _ = require('./util')
 var config = require('./config')
 var Watcher = require('./watcher')
@@ -11696,7 +11706,7 @@ p.set = function (value, lock) {
 }
 
 module.exports = Directive
-},{"./config":13,"./parsers/expression":49,"./parsers/text":52,"./util":60,"./watcher":64}],15:[function(require,module,exports){
+},{"./config":14,"./parsers/expression":50,"./parsers/text":53,"./util":61,"./watcher":65}],16:[function(require,module,exports){
 // xlink
 var xlinkNS = 'http://www.w3.org/1999/xlink'
 var xlinkRE = /^xlink:/
@@ -11729,7 +11739,7 @@ function xlinkHandler (value) {
     this.el.removeAttributeNS(xlinkNS, 'href')
   }
 }
-},{}],16:[function(require,module,exports){
+},{}],17:[function(require,module,exports){
 var _ = require('../util')
 var addClass = _.addClass
 var removeClass = _.removeClass
@@ -11748,7 +11758,7 @@ module.exports = function (value) {
     }
   }
 }
-},{"../util":60}],17:[function(require,module,exports){
+},{"../util":61}],18:[function(require,module,exports){
 var config = require('../config')
 
 module.exports = {
@@ -11761,7 +11771,7 @@ module.exports = {
   }
 
 }
-},{"../config":13}],18:[function(require,module,exports){
+},{"../config":14}],19:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 
@@ -11985,7 +11995,7 @@ module.exports = {
   }
 
 }
-},{"../parsers/template":51,"../util":60}],19:[function(require,module,exports){
+},{"../parsers/template":52,"../util":61}],20:[function(require,module,exports){
 module.exports = {
 
   isLiteral: true,
@@ -11999,7 +12009,7 @@ module.exports = {
   }
   
 }
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = { 
@@ -12027,7 +12037,7 @@ module.exports = {
   // so no need for unbind here.
 
 }
-},{"../util":60}],21:[function(require,module,exports){
+},{"../util":61}],22:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 
@@ -12066,7 +12076,7 @@ module.exports = {
   }
 
 }
-},{"../parsers/template":51,"../util":60}],22:[function(require,module,exports){
+},{"../parsers/template":52,"../util":61}],23:[function(require,module,exports){
 var _ = require('../util')
 var compile = require('../compiler/compile')
 var templateParser = require('../parsers/template')
@@ -12150,7 +12160,7 @@ module.exports = {
   }
 
 }
-},{"../compiler/compile":11,"../parsers/template":51,"../transition":54,"../util":60}],23:[function(require,module,exports){
+},{"../compiler/compile":12,"../parsers/template":52,"../transition":55,"../util":61}],24:[function(require,module,exports){
 // manipulation directives
 exports.text       = require('./text')
 exports.html       = require('./html')
@@ -12176,7 +12186,7 @@ exports['if']      = require('./if')
 // child vm communication directives
 exports['with']    = require('./with')
 exports.events     = require('./events')
-},{"./attr":15,"./class":16,"./cloak":17,"./component":18,"./el":19,"./events":20,"./html":21,"./if":22,"./model":26,"./on":29,"./partial":30,"./ref":31,"./repeat":32,"./show":33,"./style":34,"./text":35,"./transition":36,"./with":37}],24:[function(require,module,exports){
+},{"./attr":16,"./class":17,"./cloak":18,"./component":19,"./el":20,"./events":21,"./html":22,"./if":23,"./model":27,"./on":30,"./partial":31,"./ref":32,"./repeat":33,"./show":34,"./style":35,"./text":36,"./transition":37,"./with":38}],25:[function(require,module,exports){
 var _ = require('../../util')
 
 module.exports = {
@@ -12202,7 +12212,7 @@ module.exports = {
   }
 
 }
-},{"../../util":60}],25:[function(require,module,exports){
+},{"../../util":61}],26:[function(require,module,exports){
 var _ = require('../../util')
 
 module.exports = {
@@ -12326,7 +12336,7 @@ module.exports = {
   }
 
 }
-},{"../../util":60}],26:[function(require,module,exports){
+},{"../../util":61}],27:[function(require,module,exports){
 var _ = require('../../util')
 
 var handlers = {
@@ -12383,7 +12393,7 @@ module.exports = {
   }
 
 }
-},{"../../util":60,"./checkbox":24,"./default":25,"./radio":27,"./select":28}],27:[function(require,module,exports){
+},{"../../util":61,"./checkbox":25,"./default":26,"./radio":28,"./select":29}],28:[function(require,module,exports){
 var _ = require('../../util')
 
 module.exports = {
@@ -12410,7 +12420,7 @@ module.exports = {
   }
 
 }
-},{"../../util":60}],28:[function(require,module,exports){
+},{"../../util":61}],29:[function(require,module,exports){
 var _ = require('../../util')
 var Watcher = require('../../watcher')
 
@@ -12584,7 +12594,7 @@ function indexOf (arr, val) {
   }
   return -1
 }
-},{"../../util":60,"../../watcher":64}],29:[function(require,module,exports){
+},{"../../util":61,"../../watcher":65}],30:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = {
@@ -12644,7 +12654,7 @@ module.exports = {
     _.off(this.el, 'load', this.iframeBind)
   }
 }
-},{"../util":60}],30:[function(require,module,exports){
+},{"../util":61}],31:[function(require,module,exports){
 var _ = require('../util')
 var templateParser = require('../parsers/template')
 var vIf = require('./if')
@@ -12689,7 +12699,7 @@ module.exports = {
   }
 
 }
-},{"../parsers/template":51,"../util":60,"./if":22}],31:[function(require,module,exports){
+},{"../parsers/template":52,"../util":61,"./if":23}],32:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = {
@@ -12713,7 +12723,7 @@ module.exports = {
   }
   
 }
-},{"../util":60}],32:[function(require,module,exports){
+},{"../util":61}],33:[function(require,module,exports){
 var _ = require('../util')
 var isObject = _.isObject
 var isPlainObject = _.isPlainObject
@@ -13218,7 +13228,7 @@ function range (n) {
   }
   return ret
 }
-},{"../compiler/compile":11,"../compiler/transclude":12,"../parsers/expression":49,"../parsers/template":51,"../parsers/text":52,"../util":60,"../util/merge-option":62}],33:[function(require,module,exports){
+},{"../compiler/compile":12,"../compiler/transclude":13,"../parsers/expression":50,"../parsers/template":52,"../parsers/text":53,"../util":61,"../util/merge-option":63}],34:[function(require,module,exports){
 var transition = require('../transition')
 
 module.exports = function (value) {
@@ -13227,7 +13237,7 @@ module.exports = function (value) {
     el.style.display = value ? '' : 'none'
   }, this.vm)
 }
-},{"../transition":54}],34:[function(require,module,exports){
+},{"../transition":55}],35:[function(require,module,exports){
 var _ = require('../util')
 var prefixes = ['-webkit-', '-moz-', '-ms-']
 var camelPrefixes = ['Webkit', 'Moz', 'ms']
@@ -13328,7 +13338,7 @@ function prefix (prop) {
     }
   }
 }
-},{"../util":60}],35:[function(require,module,exports){
+},{"../util":61}],36:[function(require,module,exports){
 var _ = require('../util')
 
 module.exports = {
@@ -13344,7 +13354,7 @@ module.exports = {
   }
   
 }
-},{"../util":60}],36:[function(require,module,exports){
+},{"../util":61}],37:[function(require,module,exports){
 module.exports = {
 
   priority: 1000,
@@ -13359,7 +13369,7 @@ module.exports = {
   }
 
 }
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var _ = require('../util')
 var Watcher = require('../watcher')
 
@@ -13433,7 +13443,7 @@ module.exports = {
   }
 
 }
-},{"../util":60,"../watcher":64}],38:[function(require,module,exports){
+},{"../util":61,"../watcher":65}],39:[function(require,module,exports){
 var _ = require('../util')
 var Path = require('../parsers/path')
 
@@ -13521,7 +13531,7 @@ function contains (val, search) {
     return val.toString().toLowerCase().indexOf(search) > -1
   }
 }
-},{"../parsers/path":50,"../util":60}],39:[function(require,module,exports){
+},{"../parsers/path":51,"../util":61}],40:[function(require,module,exports){
 var _ = require('../util')
 
 /**
@@ -13657,7 +13667,7 @@ exports.key.keyCodes = keyCodes
  */
 
 _.extend(exports, require('./array-filters'))
-},{"../util":60,"./array-filters":38}],40:[function(require,module,exports){
+},{"../util":61,"./array-filters":39}],41:[function(require,module,exports){
 var _ = require('../util')
 var Directive = require('../directive')
 var compile = require('../compiler/compile')
@@ -13846,7 +13856,7 @@ exports._cleanup = function () {
   // turn off all instance listeners.
   this.$off()
 }
-},{"../compiler/compile":11,"../compiler/transclude":12,"../directive":14,"../util":60}],41:[function(require,module,exports){
+},{"../compiler/compile":12,"../compiler/transclude":13,"../directive":15,"../util":61}],42:[function(require,module,exports){
 var _ = require('../util')
 var inDoc = _.inDoc
 
@@ -13985,7 +13995,7 @@ exports._callHook = function (hook) {
   }
   this.$emit('hook:' + hook)
 }
-},{"../util":60}],42:[function(require,module,exports){
+},{"../util":61}],43:[function(require,module,exports){
 var mergeOptions = require('../util/merge-option')
 
 /**
@@ -14063,7 +14073,7 @@ exports._init = function (options) {
     this.$mount(options.el)
   }
 }
-},{"../util/merge-option":62}],43:[function(require,module,exports){
+},{"../util/merge-option":63}],44:[function(require,module,exports){
 var _ = require('../util')
 var Observer = require('../observer')
 var Dep = require('../observer/dep')
@@ -14278,7 +14288,7 @@ exports._defineMeta = function (key, value) {
     }
   })
 }
-},{"../observer":46,"../observer/dep":45,"../util":60}],44:[function(require,module,exports){
+},{"../observer":47,"../observer/dep":46,"../util":61}],45:[function(require,module,exports){
 var _ = require('../util')
 var arrayProto = Array.prototype
 var arrayMethods = Object.create(arrayProto)
@@ -14369,7 +14379,7 @@ _.define(
 )
 
 module.exports = arrayMethods
-},{"../util":60}],45:[function(require,module,exports){
+},{"../util":61}],46:[function(require,module,exports){
 var uid = 0
 
 /**
@@ -14420,7 +14430,7 @@ p.notify = function () {
 }
 
 module.exports = Dep
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 var _ = require('../util')
 var config = require('../config')
 var Dep = require('./dep')
@@ -14657,7 +14667,7 @@ p.removeVm = function (vm) {
 
 module.exports = Observer
 
-},{"../config":13,"../util":60,"./array":44,"./dep":45,"./object":47}],47:[function(require,module,exports){
+},{"../config":14,"../util":61,"./array":45,"./dep":46,"./object":48}],48:[function(require,module,exports){
 var _ = require('../util')
 var objProto = Object.prototype
 
@@ -14724,7 +14734,7 @@ _.define(
     }
   }
 )
-},{"../util":60}],48:[function(require,module,exports){
+},{"../util":61}],49:[function(require,module,exports){
 var _ = require('../util')
 var Cache = require('../cache')
 var cache = new Cache(1000)
@@ -14884,7 +14894,7 @@ exports.parse = function (s) {
   cache.put(s, dirs)
   return dirs
 }
-},{"../cache":10,"../util":60}],49:[function(require,module,exports){
+},{"../cache":11,"../util":61}],50:[function(require,module,exports){
 var _ = require('../util')
 var Path = require('./path')
 var Cache = require('../cache')
@@ -15112,7 +15122,7 @@ exports.parse = function (exp, needSet) {
 
 // Export the pathRegex for external use
 exports.pathTestRE = pathTestRE
-},{"../cache":10,"../util":60,"./path":50}],50:[function(require,module,exports){
+},{"../cache":11,"../util":61,"./path":51}],51:[function(require,module,exports){
 var _ = require('../util')
 var Cache = require('../cache')
 var pathCache = new Cache(1000)
@@ -15410,7 +15420,7 @@ exports.set = function (obj, path, val) {
   }
   return true
 }
-},{"../cache":10,"../util":60}],51:[function(require,module,exports){
+},{"../cache":11,"../util":61}],52:[function(require,module,exports){
 var _ = require('../util')
 var Cache = require('../cache')
 var templateCache = new Cache(1000)
@@ -15661,7 +15671,7 @@ exports.parse = function (template, clone, noSelector) {
     ? exports.clone(frag)
     : frag
 }
-},{"../cache":10,"../util":60}],52:[function(require,module,exports){
+},{"../cache":11,"../util":61}],53:[function(require,module,exports){
 var Cache = require('../cache')
 var config = require('../config')
 var dirParser = require('./directive')
@@ -15840,7 +15850,7 @@ function inlineFilters (exp) {
     }
   }
 }
-},{"../cache":10,"../config":13,"./directive":48}],53:[function(require,module,exports){
+},{"../cache":11,"../config":14,"./directive":49}],54:[function(require,module,exports){
 var _ = require('../util')
 var addClass = _.addClass
 var removeClass = _.removeClass
@@ -16030,7 +16040,7 @@ module.exports = function (el, direction, op, data, cb) {
     push(el, direction, op, leaveClass, cb)
   }
 }
-},{"../util":60}],54:[function(require,module,exports){
+},{"../util":61}],55:[function(require,module,exports){
 var _ = require('../util')
 var applyCSSTransition = require('./css')
 var applyJSTransition = require('./js')
@@ -16182,7 +16192,7 @@ var apply = exports.apply = function (el, direction, op, vm, cb) {
     if (cb) cb()
   }
 }
-},{"../util":60,"./css":53,"./js":55}],55:[function(require,module,exports){
+},{"../util":61,"./css":54,"./js":56}],56:[function(require,module,exports){
 /**
  * Apply JavaScript enter/leave functions.
  *
@@ -16226,7 +16236,7 @@ module.exports = function (el, direction, op, data, def, vm, cb) {
     }
   }
 }
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 var config = require('../config')
 
 /**
@@ -16287,7 +16297,7 @@ function enableDebug () {
     }
   }
 }
-},{"../config":13}],57:[function(require,module,exports){
+},{"../config":14}],58:[function(require,module,exports){
 var config = require('../config')
 
 /**
@@ -16485,7 +16495,7 @@ exports.extractContent = function (el) {
   }
   return rawContent
 }
-},{"../config":13}],58:[function(require,module,exports){
+},{"../config":14}],59:[function(require,module,exports){
 /**
  * Can we use __proto__?
  *
@@ -16592,7 +16602,7 @@ if (inBrowser && !exports.isIE9) {
     ? 'webkitAnimationEnd'
     : 'animationend'
 }
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 var _ = require('./debug')
 
 /**
@@ -16665,7 +16675,7 @@ exports.applyFilters = function (value, filters, vm, oldVal) {
   }
   return value
 }
-},{"./debug":56}],60:[function(require,module,exports){
+},{"./debug":57}],61:[function(require,module,exports){
 var lang   = require('./lang')
 var extend = lang.extend
 
@@ -16674,7 +16684,7 @@ extend(exports, require('./env'))
 extend(exports, require('./dom'))
 extend(exports, require('./filter'))
 extend(exports, require('./debug'))
-},{"./debug":56,"./dom":57,"./env":58,"./filter":59,"./lang":61}],61:[function(require,module,exports){
+},{"./debug":57,"./dom":58,"./env":59,"./filter":60,"./lang":62}],62:[function(require,module,exports){
 /**
  * Check is a string starts with $ or _
  *
@@ -16850,7 +16860,7 @@ exports.define = function (obj, key, val, enumerable) {
     configurable : true
   })
 }
-},{}],62:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 var _ = require('./index')
 var extend = _.extend
 
@@ -17109,7 +17119,7 @@ module.exports = function mergeOptions (parent, child, vm) {
   }
   return options
 }
-},{"./index":60}],63:[function(require,module,exports){
+},{"./index":61}],64:[function(require,module,exports){
 var _ = require('./util')
 var extend = _.extend
 
@@ -17194,7 +17204,7 @@ extend(p, require('./api/child'))
 extend(p, require('./api/lifecycle'))
 
 module.exports = _.Vue = Vue
-},{"./api/child":3,"./api/data":4,"./api/dom":5,"./api/events":6,"./api/global":7,"./api/lifecycle":8,"./directives":23,"./filters":39,"./instance/compile":40,"./instance/events":41,"./instance/init":42,"./instance/scope":43,"./util":60}],64:[function(require,module,exports){
+},{"./api/child":4,"./api/data":5,"./api/dom":6,"./api/events":7,"./api/global":8,"./api/lifecycle":9,"./directives":24,"./filters":40,"./instance/compile":41,"./instance/events":42,"./instance/init":43,"./instance/scope":44,"./util":61}],65:[function(require,module,exports){
 var _ = require('./util')
 var config = require('./config')
 var Observer = require('./observer')
@@ -17452,4 +17462,4 @@ function traverse (obj) {
 }
 
 module.exports = Watcher
-},{"./batcher":9,"./config":13,"./observer":46,"./parsers/expression":49,"./util":60}]},{},[1]);
+},{"./batcher":10,"./config":14,"./observer":47,"./parsers/expression":50,"./util":61}]},{},[2]);

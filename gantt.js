@@ -1,3 +1,6 @@
+var Vue = require("vue");
+var d3 = require("d3");
+
 Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
     ready: function(){

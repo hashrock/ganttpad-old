@@ -3,24 +3,8 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title></title>
+    <link rel="stylesheet" href="gantt.css"/>
     <style>
-        .axis path, .axis line {
-            fill: none;
-            stroke: #AAA;
-        }
-
-        rect {
-            fill: #fff;
-        }
-
-        text {
-            font-size: 9px;
-        }
-
-        rect.taskRange {
-            fill: #000;
-        }
-
         html, body{
             width: 100%;
             height: 100%;
@@ -33,10 +17,7 @@
             width: 90%;
         }
 
-        #graph{
-            width: 100%;
-            height: 400px;
-        }
+
         textarea{
             width: 100%;
             height: 200px;
@@ -45,7 +26,7 @@
 </head>
 <body>
 <div id="main">
-    <div id="graph"></div>
+    <div v-component="gantt" v-with="tasks:tasks"></div>
     <textarea v-model="textData"></textarea>
 </div>
 
