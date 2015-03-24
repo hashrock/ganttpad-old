@@ -1,12 +1,12 @@
+var Vue = require("vue");
+var d3 = require("d3");
+
 new Vue({
     el: "#main",
     data: {
-        textData: "test 2014-12-20 2014-12-24\r\ntest2 2014-12-19 2014-12-22"
+        textData: "test 2015-03-20 2015-03-24\r\ntest2 2015-03-19 2015-03-22"
     },
     ready: function(){
-
-
-
         var self = this;
         var margin = {top: 20, right: 20, bottom: 30, left: 20},
             width = parseInt(d3.select("#graph").style("width"), 10) - margin.left - margin.right,

@@ -1,0 +1,24 @@
+{
+  "name": "text-gantt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-js": "watchify index.js -o static/bundle.js -v"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hashrock/d3-gantt-example.git"
+  },
+  "author": "hashrock",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hashrock/d3-gantt-example/issues"
+  },
+  "homepage": "https://github.com/hashrock/d3-gantt-example",
+  "dependencies": {
+    "d3": "^3.5.5",
+    "vue": "^0.11.5"
+  }
+}
