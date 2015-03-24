@@ -4,7 +4,7 @@ require("./gantt.js");
 new Vue({
     el: "#main",
     data: {
-        textData: "test 2015-3-20 2015-3-24\r\ntest2 2014-12-19 2014-12-22",
+        textData: "test 2015-3-20 2015-3-24\r\ntest2 2015-3-19 2015-3-22",
         tasks: []
     },
     methods: {

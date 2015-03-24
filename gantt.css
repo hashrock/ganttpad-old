@@ -11,9 +11,9 @@ rect {
     height: 400px;
 }
 text {
-    font-size: 9px;
+    font-size: 11px;
 }
 rect.taskRange {
-    fill: #555;
+    fill: url(#gradient);
     stroke: #000;
 }

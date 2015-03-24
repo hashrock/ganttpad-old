@@ -115,6 +115,26 @@ Vue.component("gantt", {
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
 
+        var gradient = svg.append("svg:defs")
+            .append("svg:linearGradient")
+            .attr("id", "gradient")
+            .attr("x1", "0%")
+            .attr("y1", "0%")
+            .attr("x2", "0%")
+            .attr("y2", "100%")
+            .attr("spreadMethod", "pad");
+
+        // Define the gradient colors
+        gradient.append("svg:stop")
+            .attr("offset", "0%")
+            .attr("stop-color", "#8B83D6")
+            .attr("stop-opacity", 1);
+
+        gradient.append("svg:stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "#1E2563")
+            .attr("stop-opacity", 1);
+
         this.$watch("tasks", function(tasks){
             update(tasks);
         }, false, true);
