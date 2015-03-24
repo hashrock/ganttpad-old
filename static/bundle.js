@@ -128,13 +128,12 @@ require("./gantt.js");
 new Vue({
     el: "#main",
     data: {
-        textData: "test 2014-12-20 2014-12-24\r\ntest2 2014-12-19 2014-12-22",
+        textData: "test 2015-3-20 2015-3-24\r\ntest2 2014-12-19 2014-12-22",
         tasks: []
     },
-    ready: function(){
-        var self = this;
-        this.$watch("textData", function(textData){
-            self.tasks = textData.split(/\r|\n|\r\n/).map(function(line){
+    methods: {
+        update: function(textData){
+            this.tasks = textData.split(/\r|\n|\r\n/).map(function(line){
                 var args = line.split(" ");
                 if(args.length > 2){
                     return {
@@ -145,7 +144,10 @@ new Vue({
                 }
                 return null;
             }).filter(function(item){return item});
-        }, false, true);
+        }
+    },
+    ready: function(){
+        this.update(this.textData);
     }
 });
 },{"./gantt.js":1,"vue":64}],3:[function(require,module,exports){

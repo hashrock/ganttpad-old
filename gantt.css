@@ -14,5 +14,6 @@ text {
     font-size: 9px;
 }
 rect.taskRange {
-    fill: #000;
+    fill: #555;
+    stroke: #000;
 }
