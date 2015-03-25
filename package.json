@@ -19,6 +19,7 @@
   "homepage": "https://github.com/hashrock/d3-gantt-example",
   "dependencies": {
     "d3": "^3.5.5",
+    "lodash": "^3.5.0",
     "moment": "^2.9.0",
     "vue": "^0.11.5"
   }

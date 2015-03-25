@@ -17,3 +17,11 @@ rect.taskRange {
     fill: url(#gradient);
     stroke: #000;
 }
+
+rect.saturdayBackground{
+    fill: #E6ECFF;
+}
+
+rect.sundayBackground{
+    fill: #FFDEDE;
+}

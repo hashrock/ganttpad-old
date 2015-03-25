@@ -1,5 +1,13 @@
 var Vue = require("vue");
 var d3 = require("d3");
+var moment = require("moment");
+var _ = require("lodash");
+
+function daysToPixels(days, timeScale) {
+    var d1 = new Date();
+    timeScale || (timeScale = Global.timeScale);
+    return timeScale(d3.time.day.offset(d1, days)) - timeScale(d1);
+}
 
 Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
@@ -8,6 +16,9 @@ Vue.component("gantt", {
         var margin = {top: 20, right: 20, bottom: 30, left: 20},
             width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
+
+        var tasksGroup;
+        var weekendsGroup;
 
         //初期表示範囲設定
         var now = new Date();
@@ -45,7 +56,28 @@ Vue.component("gantt", {
             .tickFormat(ja_JP.timeFormat("%d%a"));
 
         var update = function (data) {
-            var tasks = svg.selectAll("rect.taskRange")
+            var backgroundFill = function(range, className){
+                var sundays = weekendsGroup.selectAll("rect." + className)
+                    .data(range(xScale.invert(0), xScale.invert(width)));
+                sundays.enter()
+                    .append("rect")
+                    .attr("class", className);
+
+                sundays.exit().remove();
+                sundays.attr("x", function(item){
+                    return xScale(item);
+                });
+                sundays.attr("y", 0);
+                sundays.attr("width", daysToPixels(1, xScale));
+                sundays.attr("height", height);
+            };
+            backgroundFill(d3.time.sunday.utc.range, "sundayBackground");
+            backgroundFill(d3.time.saturday.utc.range, "saturdayBackground");
+
+
+
+
+            var tasks = tasksGroup.selectAll("rect.taskRange")
                 .data(data);
 
             tasks.enter()
@@ -54,7 +86,7 @@ Vue.component("gantt", {
 
             tasks.exit().remove();
 
-            var text = svg.selectAll("text.taskName")
+            var text = tasksGroup.selectAll("text.taskName")
                 .data(data);
 
             text.enter()
@@ -114,6 +146,12 @@ Vue.component("gantt", {
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis);
+
+        weekendsGroup = svg.append("g")
+            .attr("class", "weekends");
+
+        tasksGroup = svg.append("g")
+            .attr("class", "tasks");
 
         var gradient = svg.append("svg:defs")
             .append("svg:linearGradient")
