@@ -61,7 +61,15 @@ Vue.component("gantt", {
             .orient("bottom")
             .ticks(d3.time.day.utc, 1)
             .tickSize(-height)
-            .tickFormat(ja_JP.timeFormat("%d%a"));
+            .tickFormat(ja_JP.timeFormat("%d"));
+
+        var monthAxis = d3.svg.axis()
+            .scale(xScale)
+            .orient("bottom")
+            .ticks(d3.time.month.utc, 1)
+            .tickSize(200)
+            .tickFormat(ja_JP.timeFormat("%d"));
+
 
         var update = function (data) {
             var backgroundFill = function(range, className){
@@ -107,6 +115,7 @@ Vue.component("gantt", {
             svg.select(".x.axis").call(xAxis)
                         .call(adjustTextLabels);
 
+            svg.select(".x.axis").call(monthAxis);
 
             //タスク表示
             tasks.attr("x", function (item) {
@@ -157,6 +166,12 @@ Vue.component("gantt", {
             .attr("transform", "translate(0," + height + ")")
             .call(xAxis)
             .call(adjustTextLabels);
+
+        svg.append("g")
+            .attr("class", "x axis")
+            .attr("transform", "translate(0," + height + ")")
+            .call(monthAxis);
+
 
         weekendsGroup = svg.append("g")
             .attr("class", "weekends");
