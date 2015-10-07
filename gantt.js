@@ -5,9 +5,15 @@ var _ = require("lodash");
 
 function daysToPixels(days, timeScale) {
     var d1 = new Date();
-    timeScale || (timeScale = Global.timeScale);
+    timeScale || (timeScale = g_timescale);
     return timeScale(d3.time.day.offset(d1, days)) - timeScale(d1);
 }
+var g_timescale;
+var adjustTextLabels = function(selection) {
+    selection.selectAll('.tick text')
+        .attr('transform', 'translate(' + daysToPixels(1) / 2 + ',0)');
+}
+
 
 Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
@@ -30,6 +36,8 @@ Vue.component("gantt", {
         var xScale = d3.time.scale()
             .domain([dateStart, dateEnd])
             .range([0, width]);
+
+        g_timescale = xScale;
 
         //曜日表示を日本語に設定
         var ja_JP = d3.locale({
@@ -96,7 +104,9 @@ Vue.component("gantt", {
             text.exit().remove();
 
             //ズーム
-            svg.select(".x.axis").call(xAxis);
+            svg.select(".x.axis").call(xAxis)
+                        .call(adjustTextLabels);
+
 
             //タスク表示
             tasks.attr("x", function (item) {
@@ -145,7 +155,8 @@ Vue.component("gantt", {
         svg.append("g")
             .attr("class", "x axis")
             .attr("transform", "translate(0," + height + ")")
-            .call(xAxis);
+            .call(xAxis)
+            .call(adjustTextLabels);
 
         weekendsGroup = svg.append("g")
             .attr("class", "weekends");
