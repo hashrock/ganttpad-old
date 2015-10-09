@@ -3,12 +3,23 @@
     stroke: #CCC;
 }
 
+.monthAxis path, .monthAxis line {
+    fill: none;
+    stroke: #CCC;
+}
+
+.monthAxis text{
+    text-anchor: start !important;
+    font-size: 20px;
+}
+
+
 rect {
     fill: #fff;
 }
 .ganttGraph{
     width: 100%;
-    height: 400px;
+    height: 100%;
 }
 text {
     font-size: 11px;
@@ -24,4 +35,8 @@ rect.saturdayBackground{
 
 rect.sundayBackground{
     fill: #FFDEDE;
+}
+
+.taskName{
+    font-size: 13px;
 }

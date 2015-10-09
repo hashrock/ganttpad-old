@@ -11,24 +11,47 @@
             margin: 0;
             padding: 0;
         }
-
         #main{
-            margin: 0 auto;
-            width: 90%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
 
-        textarea{
-            width: 100%;
-            height: 200px;
+        .container-upper{
+            flex: 1;
+        }
+        .container-lower{
+            flex: 0.5;
+            display: flex;
+        }
+        .container-lower textarea{
+            padding: 10px;
+            flex: 1;
+            border: none;
+            overflow: auto;
+            outline: none;
+            font-size: 0.8rem;
+        
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;
+            box-shadow: none;
+            background: #333;
+            color: white;   
         }
     </style>
 </head>
 <body>
 <div id="main">
-    <h1>GanttPad</h1>
-    <div v-component="gantt" v-with="tasks:tasks"></div>
-    <textarea v-model="textData" v-on="keyup: update(textData)"></textarea>
+    <div class="container-upper">
+        <div v-component="gantt" v-with="tasks:tasks"></div>
+    </div>
+    <div class="container-lower">
+        <textarea v-model="textData" v-on="keyup: update(textData)"></textarea>
+    </div>
+    
+    <!--
     <p>入力されたデータはlocalStorageに保存されます（全消しするとサンプルデータが復活します）。</p>
+    -->
 </div>
 
 <script src="static/bundle.js"></script>
