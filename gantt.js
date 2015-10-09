@@ -14,14 +14,13 @@ var adjustTextLabels = function(selection) {
         .attr('transform', 'translate(' + daysToPixels(1) / 2 + ',0)');
 }
 
-
 Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
     ready: function(){
         var self = this;
         var margin = {top: 50, right: 20, bottom: 20, left: 20},
             width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right,
-            height = 400 - margin.top - margin.bottom;
+            height = document.querySelector(".container-upper").clientHeight - margin.top - margin.bottom;
 
         var tasksGroup;
         var weekendsGroup;
@@ -201,5 +200,6 @@ Vue.component("gantt", {
         this.$watch("tasks", function(tasks){
             update(tasks);
         }, false, true);
+        
     }
 });
