@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build:js": "browserify ${npm_package_config_src_js} > ${npm_package_config_dist_js}",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch-js": "watchify index.js -o static/bundle.js -v"
+    "watch:js": "watchify index.js -o static/bundle.js -v",
+    "wzrd": "wzrd index.js:static/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +24,9 @@
     "lodash": "^3.5.0",
     "moment": "^2.9.0",
     "vue": "^0.11.5"
+  },
+  "config": {
+    "src_js": "index.js",
+    "dist_js": "static/bundle.js"
   }
 }
