@@ -19,7 +19,7 @@ Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
     ready: function(){
         var self = this;
-        var margin = {top: 20, right: 20, bottom: 30, left: 20},
+        var margin = {top: 50, right: 20, bottom: 20, left: 20},
             width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right,
             height = 400 - margin.top - margin.bottom;
 
@@ -58,18 +58,17 @@ Vue.component("gantt", {
         //X軸表示設定
         var xAxis = d3.svg.axis()
             .scale(xScale)
-            .orient("bottom")
+            .orient("top")
             .ticks(d3.time.day.utc, 1)
-            .tickSize(-height)
-            .tickFormat(ja_JP.timeFormat("%d"));
+            .tickSize(height)
+            .tickFormat(ja_JP.timeFormat("%-d"));
 
         var monthAxis = d3.svg.axis()
             .scale(xScale)
-            .orient("bottom")
+            .orient("top")
             .ticks(d3.time.month.utc, 1)
-            .tickSize(200)
-            .tickFormat(ja_JP.timeFormat("%d"));
-
+            .tickSize(height + 20)
+            .tickFormat(ja_JP.timeFormat("%B"));
 
         var update = function (data) {
             var backgroundFill = function(range, className){
@@ -115,13 +114,13 @@ Vue.component("gantt", {
             svg.select(".x.axis").call(xAxis)
                         .call(adjustTextLabels);
 
-            svg.select(".x.axis").call(monthAxis);
+            svg.select(".x.monthAxis").call(monthAxis);
 
             //タスク表示
             tasks.attr("x", function (item) {
                 return xScale(item.start);
             }).attr("y", function (item, i) {
-                return i * 40 + 20
+                return i * 30 + 20
             }).attr("width", function (item) {
                 return Math.abs(xScale(item.end) - xScale(item.start));
             }).attr("height", 10);
@@ -135,14 +134,15 @@ Vue.component("gantt", {
                     return xScale(item.start) - 10
                 })
                 .attr("y", function (item, i) {
-                    return i * 40 + 28
+                    return i * 30 + 30
                 });
         };
 
         //ズーム範囲設定
         var zoom = d3.behavior.zoom()
             .x(xScale)
-            .scaleExtent([0.5, 10])
+            .scale(0.5)
+            .scaleExtent([0.3, 10])
             .on("zoom", function () {
                 update(self.tasks);
             });
@@ -168,10 +168,9 @@ Vue.component("gantt", {
             .call(adjustTextLabels);
 
         svg.append("g")
-            .attr("class", "x axis")
+            .attr("class", "x monthAxis")
             .attr("transform", "translate(0," + height + ")")
             .call(monthAxis);
-
 
         weekendsGroup = svg.append("g")
             .attr("class", "weekends");
@@ -191,7 +190,7 @@ Vue.component("gantt", {
         // Define the gradient colors
         gradient.append("svg:stop")
             .attr("offset", "0%")
-            .attr("stop-color", "#8B83D6")
+            .attr("stop-color", "#9B93E6")
             .attr("stop-opacity", 1);
 
         gradient.append("svg:stop")

@@ -3,6 +3,17 @@
     stroke: #CCC;
 }
 
+.monthAxis path, .monthAxis line {
+    fill: none;
+    stroke: #CCC;
+}
+
+.monthAxis text{
+    text-anchor: start !important;
+    font-size: 20px;
+}
+
+
 rect {
     fill: #fff;
 }
@@ -24,4 +35,8 @@ rect.saturdayBackground{
 
 rect.sundayBackground{
     fill: #FFDEDE;
+}
+
+.taskName{
+    font-size: 13px;
 }
