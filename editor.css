@@ -80,3 +80,5 @@ html, body{
 .help__container{
 	padding: 20px;
 }
+
+[v-cloak] { display: none }

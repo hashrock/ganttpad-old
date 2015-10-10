@@ -9,7 +9,7 @@
 <body>
 <div id="main">
     <div class="container-upper">
-        <div v-component="gantt" v-with="tasks:tasks"></div>
+        <div v-component="gantt" tasks="{{tasks}}"></div>
     </div>
     <div class="container-lower">
         <textarea v-model="textData" v-on="keyup: update(textData)"></textarea>
@@ -21,7 +21,7 @@
         </div>
     </div>
     
-    <div v-if="showHelp" v-on="click: showHelp = false" class="help">
+    <div v-if="showHelp" v-on="click: showHelp = false" class="help" v-cloak>
         <div class="help__container">
             <p>
                 GanttPadは、テキストからガントチャートを生成するためのツールです。

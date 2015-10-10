@@ -16,6 +16,7 @@ var adjustTextLabels = function(selection) {
 
 Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
+    props: ["tasks"],
     ready: function(){
         var self = this;
         var margin = {top: 50, right: 20, bottom: 20, left: 20},
