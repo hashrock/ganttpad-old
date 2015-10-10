@@ -13,11 +13,30 @@
     </div>
     <div class="container-lower">
         <textarea v-model="textData" v-on="keyup: update(textData)"></textarea>
+        <div class="container-lower__menus">
+            <button class="container-lower__help ghost-button" v-on="click: showHelp = true">Help</button>
+            <button class="container-lower__example ghost-button">&nbsp;</button>
+            <button class="container-lower__dummy ghost-button">&nbsp;</button>
+            <button class="container-lower__dummy ghost-button">&nbsp;</button>
+        </div>
     </div>
     
-    <!--
-    <p>入力されたデータはlocalStorageに保存されます（全消しするとサンプルデータが復活します）。</p>
-    -->
+    <div v-if="showHelp" v-on="click: showHelp = false" class="help">
+        <div class="help__container">
+            <p>
+                GanttPadは、テキストからガントチャートを生成するためのツールです。
+            </p>
+            <h2>予定の入力方法</h2>
+            <p>
+                「タスク名 開始日 終了日」と、スペース区切りで記入します。<br>
+                例）「書類作成 10/1 10/15」
+            </p>
+            <h2>その他</h2>
+            <p>
+                入力内容はすべてLocalStorageに保存されます。
+            </p>
+        </div>
+    </div>
 </div>
 
 <script src="static/bundle.js"></script>

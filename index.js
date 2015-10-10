@@ -26,7 +26,8 @@ new Vue({
     el: "#main",
     data: {
         textData: "",
-        tasks: []
+        tasks: [],
+        showHelp: false
     },
     methods: {
         update: function(textData){

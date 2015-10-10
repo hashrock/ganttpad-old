@@ -31,3 +31,52 @@ html, body{
 	background: #333;
 	color: white;   
 }
+
+.container-lower__menus{
+	display: flex;
+	flex-direction: column;
+	width: 100px;
+}
+.container-lower__help{
+	flex: 1;
+}
+
+.container-lower__example{
+	flex: 1;
+}
+
+.container-lower__dummy{
+	flex: 1;
+}
+
+.ghost-button {
+  display: inline-block;
+  padding: 8px;
+  color: #fff;
+  border: 1px solid #fff;
+  text-align: center;
+  outline: none;
+  text-decoration: none;
+  background: #555;
+}
+.ghost-button:hover{
+  background-color: #ccc;
+  color: #000;
+}
+.ghost-button:active {
+  background-color: #fff;
+  color: #000;
+}
+.help{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+	bottom: 20px;
+	background: #fff;
+	box-shadow:rgba(113, 135, 164, 0.65098) 0px 0px 6px 3px;
+	border-radius: 5px;
+}
+.help__container{
+	padding: 20px;
+}
