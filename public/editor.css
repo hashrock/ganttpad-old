@@ -41,7 +41,10 @@ html, body{
 	flex: 1;
 }
 
-.container-lower__example{
+.container-lower__create{
+	flex: 1;
+}
+.container-lower__open{
 	flex: 1;
 }
 
