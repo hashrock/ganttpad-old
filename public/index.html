@@ -1,44 +1,56 @@
 <!DOCTYPE html>
 <html>
+
 <head lang="ja">
     <meta charset="UTF-8">
     <title>GanttPad</title>
-    <link rel="stylesheet" href="gantt.css"/>
+    <link rel="stylesheet" href="gantt.css" />
     <link rel="stylesheet" href="editor.css">
 </head>
-<body>
-<div id="main">
-    <div class="container-upper">
-        <div v-component="gantt" tasks="{{tasks}}"></div>
-    </div>
-    <div class="container-lower">
-        <textarea v-model="textData" v-on="keyup: update(textData)"></textarea>
-        <div class="container-lower__menus">
-            <button class="container-lower__help ghost-button" v-on="click: showHelp = true">Help</button>
-            <button class="container-lower__create ghost-button">Create New</button>
-            <button class="container-lower__open ghost-button">Open</button>
-            <button class="container-lower__dummy ghost-button">&nbsp;</button>
-        </div>
-    </div>
-    
-    <div v-if="showHelp" v-on="click: showHelp = false" class="help" v-cloak>
-        <div class="help__container">
-            <p>
-                GanttPadは、テキストからガントチャートを生成するためのツールです。
-            </p>
-            <h2>予定の入力方法</h2>
-            <p>
-                「タスク名 開始日 終了日」と、スペース区切りで記入します。<br>
-                例）「書類作成 10/1 10/15」
-            </p>
-            <h2>その他</h2>
-            <p>
-                入力内容はすべてLocalStorageに保存されます。
-            </p>
-        </div>
-    </div>
-</div>
 
-<script src="bundle.js"></script>
+<body>
+    <div id="main">
+        <nav>
+            <h2>Schedules <button v-on="click: createPost">Add New</button></h2>
+            <div class="nav__postItem" v-repeat="post : posts" v-on="click: openPost(post._id)">
+                {{post.title}}
+            </div>
+        </nav>
+        <article>
+            <div class="container-upper">
+                <div v-component="gantt" tasks="{{tasks}}"></div>
+            </div>
+            <div class="container-lower">
+                <textarea v-model="post.contents" v-on="keyup: update(textData)"></textarea>
+                <div class="container-lower__menus">
+                    <button class="container-lower__help ghost-button" v-on="click: showHelp = true">Help</button>
+                    <button class="container-lower__create ghost-button">Create New</button>
+                    <button class="container-lower__open ghost-button">Open</button>
+                    <button class="container-lower__dummy ghost-button">&nbsp;</button>
+                </div>
+            </div>
+
+            <div v-if="showHelp" v-on="click: showHelp = false" class="help" v-cloak>
+                <div class="help__container">
+                    <p>
+                        GanttPadは、テキストからガントチャートを生成するためのツールです。
+                    </p>
+                    <h2>予定の入力方法</h2>
+                    <p>
+                        「タスク名 開始日 終了日」と、スペース区切りで記入します。
+                        <br> 例）「書類作成 10/1 10/15」
+                    </p>
+                    <h2>その他</h2>
+                    <p>
+                        入力内容はすべてLocalStorageに保存されます。
+                    </p>
+                </div>
+            </div>
+
+        </article>
+    </div>
+
+    <script src="bundle.js"></script>
 </body>
+
 </html>

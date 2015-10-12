@@ -1,6 +1,9 @@
 var Vue = require("vue");
 require("./gantt.js");
 var moment = require("moment");
+var request = require("superagent");
+var Router = require('director').Router;
+var router = new Router();
 
 function sample(){
     return [
@@ -22,10 +25,15 @@ function sample(){
     }).join("\r\n");
 }
 
+
 new Vue({
     el: "#main",
     data: {
-        textData: "",
+        post: {
+            title: "Untitled",
+            contents: ""
+        },
+        posts: [],
         tasks: [],
         showHelp: false
     },
@@ -58,9 +66,18 @@ new Vue({
                 }
                 return null;
             }).filter(function(item){return item});
+        },
+        createPost : function(){
+        },
+        savePost : function(){
+            alert("Not implemented");
+        },
+        openPost : function(_id){
+            router.setRoute('/' + _id);
         }
     },
     ready: function(){
+        var self = this;
         var storage = localStorage["ganttPad"];
         if(storage == undefined || storage.trim().length === 0 ){
             this.textData = sample();
@@ -68,5 +85,23 @@ new Vue({
             this.textData = localStorage["ganttPad"];
         }
         this.update(this.textData);
+        
+        request.get("/api", function(err, res){
+            if(err){
+                alert(err);
+            }
+            self.posts = res.body;
+        })
+        
+        router.on('/:id', function (id) {
+            request.get("/api/" + id, function(err, res){
+                if(err){
+                    alert(err);
+                }
+                self.post = res.body;
+                alert("loaded");
+            })
+        });
+        router.init('/')
     }
 });
