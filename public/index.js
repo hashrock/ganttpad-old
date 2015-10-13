@@ -44,12 +44,7 @@ var app = new Vue({
         }
     },
     methods: {
-        update: function (textData) {
-            if (lastContents !== this.editing.contents || lastTitle !== this.editing.title) {
-                this.saved = false;
-            }
-            autoSave();
-
+        updateGantt: function(textData){
             this.tasks = textData.split(/\r|\n|\r\n/).map(function (line) {
                 line = line.replace(/／/g, "/");
                 line = line.replace(/　/g, " ");
@@ -76,6 +71,16 @@ var app = new Vue({
                 }
                 return null;
             }).filter(function (item) { return item });
+        },
+        update: function (textData) {
+            if (lastContents !== this.editing.contents || lastTitle !== this.editing.title) {
+                this.saved = false;
+            }
+            if(autoSave){
+                autoSave();
+            }
+
+            this.updateGantt(textData);
         },
         createPost: function (textdata) {
             var title = prompt("Title");
@@ -134,6 +139,7 @@ var app = new Vue({
 
         router.on("/", function () {
             self.editing.contents = sample();
+            self.update(self.editing.contents);
         })
         router.init('/')
     }
