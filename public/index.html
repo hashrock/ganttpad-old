@@ -24,8 +24,8 @@
                 <textarea v-model="editing.contents" v-on="keyup: update(editing.contents)" debounce="100"></textarea>
                 <div class="container-lower__menus">
                     <button class="container-lower__help ghost-button" v-on="click: showHelp = true">Help</button>
-                    <button class="container-lower__create ghost-button">Create New</button>
-                    <button class="container-lower__open ghost-button">Open</button>
+                    <button class="container-lower__create ghost-button">&nbsp;</button>
+                    <button class="container-lower__open ghost-button">&nbsp;</button>
                     <button class="container-lower__save ghost-button" v-on="click: savePost" v-attr="disabled: saved" v-text="saveButtonLabel"></button>
                 </div>
             </div>
