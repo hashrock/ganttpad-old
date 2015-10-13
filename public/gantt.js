@@ -14,6 +14,32 @@ var adjustTextLabels = function(selection) {
         .attr('transform', 'translate(' + daysToPixels(1) / 2 + ',0)');
 }
 
+function addGradient(svg){
+    var start = d3.rgb(155, 147, 230);
+    var stop = start.darker(3);
+    
+    var gradient = svg.append("svg:defs")
+        .append("svg:linearGradient")
+        .attr("id", "gradient")
+        .attr("x1", "0%")
+        .attr("y1", "0%")
+        .attr("x2", "0%")
+        .attr("y2", "100%")
+        .attr("spreadMethod", "pad");
+    
+    // Define the gradient colors
+    gradient.append("svg:stop")
+        .attr("offset", "0%")
+        .attr("stop-color", start.toString())
+        .attr("stop-opacity", 1);
+    
+    gradient.append("svg:stop")
+        .attr("offset", "100%")
+        .attr("stop-color", stop.toString())
+        .attr("stop-opacity", 1);
+}
+
+
 Vue.component("gantt", {
     template: "<div class='ganttGraph'>",
     props: ["tasks"],
@@ -178,25 +204,7 @@ Vue.component("gantt", {
         tasksGroup = svg.append("g")
             .attr("class", "tasks");
 
-        var gradient = svg.append("svg:defs")
-            .append("svg:linearGradient")
-            .attr("id", "gradient")
-            .attr("x1", "0%")
-            .attr("y1", "0%")
-            .attr("x2", "0%")
-            .attr("y2", "100%")
-            .attr("spreadMethod", "pad");
-
-        // Define the gradient colors
-        gradient.append("svg:stop")
-            .attr("offset", "0%")
-            .attr("stop-color", "#9B93E6")
-            .attr("stop-opacity", 1);
-
-        gradient.append("svg:stop")
-            .attr("offset", "100%")
-            .attr("stop-color", "#1E2563")
-            .attr("stop-opacity", 1);
+        addGradient(svg);
 
         this.$watch("tasks", function(tasks){
             update(tasks);
