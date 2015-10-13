@@ -18,7 +18,8 @@
     "mongoose-timestamp": "^0.4.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
-    "superagent": "^1.4.0"
+    "superagent": "^1.4.0",
+    "underscore": "^1.8.3"
   },
   "config": {
     "src_js": "public/index.js",

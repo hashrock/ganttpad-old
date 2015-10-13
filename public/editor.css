@@ -76,6 +76,7 @@ article{
 	display: flex;
 	flex-direction: column;
 	width: 100px;
+	background: black;
 }
 .container-lower__help{
 	flex: 1;
@@ -91,6 +92,14 @@ article{
 .container-lower__dummy{
 	flex: 1;
 }
+.container-lower__save{
+	flex: 1;
+}
+.container-lower__save:disabled{
+	opacity: 0.5;
+}
+
+
 
 .ghost-button {
   display: inline-block;
@@ -136,3 +145,4 @@ article{
 }
 
 [v-cloak] { display: none }
+

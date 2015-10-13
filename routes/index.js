@@ -8,6 +8,21 @@ router.route("/:_id")
         Post.findById(req.param("_id"), function (err, post) {
             res.json(post);
         })
+    })
+    .put(function(req, res){
+        Post.findById(req.param("_id"), function (err, post) {
+            post.title = req.param("title");
+            post.contents = req.param("contents");
+            post.save(function(err){
+                if(err){
+                    res.send(err);
+                }
+                res.send({
+                    message: "success",
+                    posted: post
+                })
+            });
+        })
     });
 
 router.route("/")
