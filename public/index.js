@@ -39,17 +39,17 @@ var app = new Vue({
         showHelp: false
     },
     computed: {
-        saveButtonLabel: function(){
+        saveButtonLabel: function () {
             return this.saved ? "Saved" : "Save";
         }
     },
     methods: {
         update: function (textData) {
-            if(lastContents !== this.editing.contents || lastTitle !== this.editing.title){
+            if (lastContents !== this.editing.contents || lastTitle !== this.editing.title) {
                 this.saved = false;
             }
             autoSave();
-            
+
             this.tasks = textData.split(/\r|\n|\r\n/).map(function (line) {
                 line = line.replace(/／/g, "/");
                 line = line.replace(/　/g, " ");
@@ -77,15 +77,15 @@ var app = new Vue({
                 return null;
             }).filter(function (item) { return item });
         },
-        createPost: function () {
+        createPost: function (textdata) {
             var title = prompt("Title");
             if (title) {
                 request
                     .post("/api")
                     .type('form')
-                    .send({ title: title, contents: "" })
+                    .send({ title: title, contents: textdata })
                     .end(function (err, res) {
-                        if(err){
+                        if (err) {
                             alert(err);
                         }
                         var _id = res.body.posted._id;
@@ -94,47 +94,52 @@ var app = new Vue({
             }
         },
         savePost: function () {
-            if(!this.editing.title){
-                this.createPost();
-            }else{
+            if (this.editing._id) {
+                console.log(this.editing._id);
                 save();
+            } else {
+                this.createPost(this.editing.contents);
             }
         },
         openPost: function (_id) {
             router.setRoute('/' + _id);
+        },
+        listPosts: function () {
+            var self = this;
+            request.get("/api", function (err, res) {
+                if (err) {
+                    alert(err);
+                }
+                self.posts = res.body;
+            })
+
         }
     },
     ready: function () {
         var self = this;
-        request.get("/api", function (err, res) {
-            if (err) {
-                alert(err);
-            }
-            self.posts = res.body;
-        })
+        this.listPosts();
 
         router.on('/:id', function (id) {
             request.get("/api/" + id, function (err, res) {
                 if (err) {
                     alert(err);
                 }
-                
+
                 self.editing = res.body;
                 backup(self.editing);
                 self.update(self.editing.contents);
+                self.listPosts();
             })
         });
-        
-        router.on("/", function (){
-            
+
+        router.on("/", function () {
+            self.editing.contents = sample();
         })
-        
-        
         router.init('/')
     }
 });
 
-function backup(editing){
+function backup(editing) {
     lastContents = editing.contents;
     lastTitle = editing.title;
     app.$data.saved = true;
@@ -143,26 +148,33 @@ function backup(editing){
 var lastTitle = "";
 var lastContents = "";
 
-var save = function(){
+var save = function () {
     var self = app.$data;
+    if (!self.editing._id) {
+        return;
+    }
+    if (!self.editing) {
+        console.log("Editing undefined!");
+        return;
+    }
     request
         .put("/api/" + self.editing._id)
         .type('form')
         .send({ title: self.editing.title, contents: self.editing.contents })
         .end(function (err, res) {
-            if(err){
+            if (err) {
                 alert(err);
             }
             backup(self.editing);
             self.saved = true;
             console.log("saved");
         });
-    
+
 }
 
-var autoSave = _.debounce(function() {
+var autoSave = _.debounce(function () {
     var self = app.$data;
-    if(lastTitle === self.editing.title && lastContents === self.editing.contents){
+    if (lastTitle === self.editing.title && lastContents === self.editing.contents) {
         return;
     }
     save();

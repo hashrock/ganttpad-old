@@ -11,6 +11,9 @@ router.route("/:_id")
     })
     .put(function(req, res){
         Post.findById(req.param("_id"), function (err, post) {
+            if(err){
+                console.log(err);
+            }
             post.title = req.param("title");
             post.contents = req.param("contents");
             post.save(function(err){

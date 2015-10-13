@@ -11,7 +11,7 @@
 <body>
     <div id="main">
         <nav>
-            <h2>Schedules <button v-on="click: createPost">Add New</button></h2>
+            <h2>Schedules <button v-on="click: createPost('')">Add New</button></h2>
             <div class="nav__postItem" v-repeat="post : posts" v-on="click: openPost(post._id)" v-class="">
                 {{post.title}}
             </div>
