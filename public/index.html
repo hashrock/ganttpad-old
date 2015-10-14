@@ -17,6 +17,7 @@
         <article>
             <div class="container-upper">
                 <div v-component="gantt" tasks="{{tasks}}"></div>
+                <div class="container-upper__alert" v-transition="down" v-if="message !== ''" v-text="message"></div>
             </div>
             <div class="container-lower">
                 <textarea v-model="editing.contents" v-on="keyup: update(editing.contents)" debounce="100"></textarea>

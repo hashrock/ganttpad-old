@@ -36,7 +36,8 @@ var app = new Vue({
         posts: [],
         tasks: [],
         saved: false,
-        showHelp: false
+        showHelp: false,
+        message: ""
     },
     computed: {
         saveButtonLabel: function () {
@@ -107,6 +108,7 @@ var app = new Vue({
             }
         },
         openPost: function (_id) {
+            this.message = "Loading ...";
             router.setRoute('/' + _id);
         },
         listPosts: function () {
@@ -124,12 +126,13 @@ var app = new Vue({
         var self = this;
         this.listPosts();
 
+        this.message = "Loading ...";
         router.on('/:id', function (id) {
             request.get("/api/" + id, function (err, res) {
                 if (err) {
                     alert(err);
                 }
-
+                self.message = "";
                 self.editing = res.body;
                 backup(self.editing);
                 self.update(self.editing.contents);
@@ -140,6 +143,7 @@ var app = new Vue({
         router.on("/", function () {
             self.editing.contents = sample();
             self.update(self.editing.contents);
+            self.message = "";
         })
         router.init('/')
     }

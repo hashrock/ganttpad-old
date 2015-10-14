@@ -52,6 +52,7 @@ article{
 
 .container-upper{
 	flex: 1;
+	position: relative;
 }
 .container-lower{
 	flex: 0.5;
@@ -149,3 +150,25 @@ article{
 }
 [v-cloak] { display: none }
 
+.container-upper__alert{
+	position: absolute;
+	top: 0;
+	left: 50%;
+	margin-left: -100px;
+	width: 200px;
+	height: 2rem;
+	line-height: 2rem;	
+	border-radius: 4px;
+	text-align: center;
+	background: #FFF;
+    color: #6AD000;
+	box-shadow:rgba(113, 135, 164, 0.65098) 0px 0px 6px 3px;
+	
+}
+.down-transition {
+	transition: all 1s ease;
+	top: 0;
+}
+.down-enter, .down-leave {
+	top: -3rem;
+}
