@@ -143,6 +143,9 @@ article{
 	color: #fff;
 	text-decoration: underline;
 }
-
+.nav__postItem--selected{
+	color: #C6FF8B;
+	background: #666;	
+}
 [v-cloak] { display: none }
 
