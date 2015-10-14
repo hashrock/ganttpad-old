@@ -1,6 +1,6 @@
 {
   "name": "ganttpad",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "build:js": "browserify ${npm_package_config_src_js} > ${npm_package_config_dist_js}",
