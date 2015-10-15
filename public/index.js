@@ -108,6 +108,9 @@ var app = new Vue({
             }
         },
         openPost: function (_id) {
+            if(this.editing._id === _id){
+                return;
+            }
             this.message = "Loading ...";
             router.setRoute('/' + _id);
         },
