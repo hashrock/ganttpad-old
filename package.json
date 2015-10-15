@@ -24,5 +24,8 @@
   "config": {
     "src_js": "public/index.js",
     "dist_js": "public/bundle.js"
+  },
+  "devDependencies": {
+    "watchify": "^3.4.0"
   }
 }
