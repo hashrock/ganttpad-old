@@ -21,13 +21,15 @@
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
     "superagent": "^1.4.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "vue": "^0.12.16"
   },
   "config": {
     "src_js": "public/index.js",
     "dist_js": "public/bundle.js"
   },
   "devDependencies": {
+    "browserify": "^11.2.0",
     "node-dev": "^2.7.1",
     "parallelshell": "^2.0.0",
     "watchify": "^3.4.0"
