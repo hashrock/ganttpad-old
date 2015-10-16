@@ -16,10 +16,10 @@ Text to Gantt converter
 
 # Usage
 
- * git clone this
+ * git clone git@github.com:hashrock/ganttpad.git
+ * npm install
  * npm start
 
 # Development
 
- * npm start
- * npm run watch:js
+ * npm run dev
