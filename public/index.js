@@ -2,7 +2,7 @@ var Vue = require("vue");
 require("./gantt.js");
 var moment = require("moment");
 var request = require("superagent");
-var _ = require("underscore");
+var _ = require("lodash");
 var Router = require('director').Router;
 var router = new Router();
 

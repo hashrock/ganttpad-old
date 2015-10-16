@@ -17,13 +17,13 @@
     "director": "^1.2.8",
     "express": "~4.13.1",
     "hjs": "~0.0.6",
+    "lodash": "^3.10.1",
     "moment": "^2.10.6",
     "mongoose": "^4.1.10",
     "mongoose-timestamp": "^0.4.0",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
     "superagent": "^1.4.0",
-    "underscore": "^1.8.3",
     "vue": "^0.12.16"
   },
   "config": {
