@@ -5,7 +5,9 @@
   "scripts": {
     "build:js": "browserify ${npm_package_config_src_js} > ${npm_package_config_dist_js}",
     "start": "node ./bin/www",
-    "watch:js": "watchify ${npm_package_config_src_js} -o ${npm_package_config_dist_js} -dv"
+    "watch:js": "watchify ${npm_package_config_src_js} -o ${npm_package_config_dist_js} -dv",
+    "dev": "parallelshell \"npm run watch:js\" \"node-dev ./bin/www\"",
+    "postinstall": "npm run build:js"
   },
   "dependencies": {
     "body-parser": "~1.13.2",
@@ -26,6 +28,8 @@
     "dist_js": "public/bundle.js"
   },
   "devDependencies": {
+    "node-dev": "^2.7.1",
+    "parallelshell": "^2.0.0",
     "watchify": "^3.4.0"
   }
 }
