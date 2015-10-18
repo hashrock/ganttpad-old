@@ -172,3 +172,12 @@ article{
 .down-enter, .down-leave {
 	top: -3rem;
 }
+
+@media print{
+	.container-lower{
+		display: none;
+	}
+	nav{
+		display: none;
+	}
+}
