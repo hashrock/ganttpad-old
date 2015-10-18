@@ -50,7 +50,11 @@ module.exports = function(){
             .attr("stop-opacity", 1);
     }
     
-    this.update = function (data) {
+    this.data = function(data){
+        _data = data;
+    }
+    
+    this.update = function () {
         var backgroundFill = function (range, className) {
             var sundays = _weekendsGroup.selectAll("rect." + className)
                 .data(range(_xScale.invert(0), _xScale.invert(_width)));
@@ -70,7 +74,7 @@ module.exports = function(){
         backgroundFill(d3.time.saturday.utc.range, "saturdayBackground");
 
         var tasks = _tasksGroup.selectAll("rect.taskRange")
-            .data(data);
+            .data(_data);
 
         tasks.enter()
             .append("rect")
@@ -79,7 +83,7 @@ module.exports = function(){
         tasks.exit().remove();
 
         var text = _tasksGroup.selectAll("text.taskName")
-            .data(data);
+            .data(_data);
 
         text.enter()
             .append("text")
@@ -113,13 +117,14 @@ module.exports = function(){
             .attr("y", function (item, i) {
                 return i * 30 + 30
             });
-            
-        _data = data;
     };
 
 
 
     this.initialize = function () {
+        //FIXME かなり乱暴だが、initializeが走るたびに削除。リサイズの為の対応
+        d3.select(".ganttGraph").select("svg").remove();
+
         var self = this;
         var margin = { top: 50, right: 20, bottom: 20, left: 20 };
         _width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right;
@@ -176,7 +181,7 @@ module.exports = function(){
             .scale(0.5)
             .scaleExtent([0.3, 10])
             .on("zoom", function () {
-                self.update(_data);
+                self.update();
             });
 
         //SVG生成
