@@ -9,15 +9,15 @@ function daysToPixels(days, timeScale) {
     return timeScale(d3.time.day.offset(d1, days)) - timeScale(d1);
 }
 var g_timescale;
-var adjustTextLabels = function(selection) {
+var adjustTextLabels = function (selection) {
     selection.selectAll('.tick text')
         .attr('transform', 'translate(' + daysToPixels(1) / 2 + ',0)');
 }
 
-function addGradient(svg){
+function addGradient(svg) {
     var start = d3.rgb(155, 147, 230);
     var stop = start.darker(3);
-    
+
     var gradient = svg.append("svg:defs")
         .append("svg:linearGradient")
         .attr("id", "gradient")
@@ -32,7 +32,7 @@ function addGradient(svg){
         .attr("offset", "0%")
         .attr("stop-color", start.toString())
         .attr("stop-opacity", 1);
-    
+
     gradient.append("svg:stop")
         .attr("offset", "100%")
         .attr("stop-color", stop.toString())
@@ -40,17 +40,92 @@ function addGradient(svg){
 }
 
 
-Vue.component("gantt", {
-    template: "<div class='ganttGraph'>",
-    props: ["tasks"],
-    ready: function(){
-        var self = this;
-        var margin = {top: 50, right: 20, bottom: 20, left: 20},
-            width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right,
-            height = document.querySelector(".container-upper").clientHeight - margin.top - margin.bottom;
+function chart() {
+    var _weekendsGroup;
+    var _tasksGroup;
+    var xScale;
+    var _width;
+    var _height;
+    var _svg;
+    var _xAxis;
+    var _monthAxis;
+    var _data;
+    
+    this.update = function (data) {
+        var backgroundFill = function (range, className) {
+            var sundays = _weekendsGroup.selectAll("rect." + className)
+                .data(range(xScale.invert(0), xScale.invert(_width)));
+            sundays.enter()
+                .append("rect")
+                .attr("class", className);
 
-        var tasksGroup;
-        var weekendsGroup;
+            sundays.exit().remove();
+            sundays.attr("x", function (item) {
+                return xScale(item);
+            });
+            sundays.attr("y", 0);
+            sundays.attr("width", daysToPixels(1, xScale));
+            sundays.attr("height", _height);
+        };
+        backgroundFill(d3.time.sunday.utc.range, "sundayBackground");
+        backgroundFill(d3.time.saturday.utc.range, "saturdayBackground");
+
+        var tasks = _tasksGroup.selectAll("rect.taskRange")
+            .data(data);
+
+        tasks.enter()
+            .append("rect")
+            .attr("class", "taskRange");
+
+        tasks.exit().remove();
+
+        var text = _tasksGroup.selectAll("text.taskName")
+            .data(data);
+
+        text.enter()
+            .append("text")
+            .attr("class", "taskName");
+
+        text.exit().remove();
+
+        //ズーム
+        _svg.select(".x.axis").call(_xAxis)
+            .call(adjustTextLabels);
+
+        _svg.select(".x.monthAxis").call(_monthAxis);
+
+        //タスク表示
+        tasks.attr("x", function (item) {
+            return xScale(item.start);
+        }).attr("y", function (item, i) {
+            return i * 30 + 20
+        }).attr("width", function (item) {
+            return Math.abs(xScale(item.end) - xScale(item.start));
+        }).attr("height", 10);
+
+        //タスクのラベル表示
+        text.text(function (item) {
+            return item.name
+        })
+            .attr("text-anchor", "end")
+            .attr("x", function (item) {
+                return xScale(item.start) - 10
+            })
+            .attr("y", function (item, i) {
+                return i * 30 + 30
+            });
+            
+        _data = data;
+    };
+
+
+
+    this.initialize = function () {
+        var self = this;
+        var margin = { top: 50, right: 20, bottom: 20, left: 20 };
+        _width = parseInt(d3.select(".ganttGraph").style("width"), 10) - margin.left - margin.right;
+        _height = document.querySelector(".container-upper").clientHeight - margin.top - margin.bottom;
+            
 
         //初期表示範囲設定
         var now = new Date();
@@ -59,9 +134,9 @@ Vue.component("gantt", {
         var dateEnd = new Date(now.getTime());
         dateEnd.setDate(dateEnd.getDate() + 15);
 
-        var xScale = d3.time.scale()
+        xScale = d3.time.scale()
             .domain([dateStart, dateEnd])
-            .range([0, width]);
+            .range([0, _width]);
 
         g_timescale = xScale;
 
@@ -82,87 +157,19 @@ Vue.component("gantt", {
         });
 
         //X軸表示設定
-        var xAxis = d3.svg.axis()
+        _xAxis = d3.svg.axis()
             .scale(xScale)
             .orient("top")
             .ticks(d3.time.day.utc, 1)
-            .tickSize(height)
+            .tickSize(_height)
             .tickFormat(ja_JP.timeFormat("%-d"));
 
-        var monthAxis = d3.svg.axis()
+        _monthAxis = d3.svg.axis()
             .scale(xScale)
             .orient("top")
             .ticks(d3.time.month.utc, 1)
-            .tickSize(height + 20)
+            .tickSize(_height + 20)
             .tickFormat(ja_JP.timeFormat("%B"));
-
-        var update = function (data) {
-            var backgroundFill = function(range, className){
-                var sundays = weekendsGroup.selectAll("rect." + className)
-                    .data(range(xScale.invert(0), xScale.invert(width)));
-                sundays.enter()
-                    .append("rect")
-                    .attr("class", className);
-
-                sundays.exit().remove();
-                sundays.attr("x", function(item){
-                    return xScale(item);
-                });
-                sundays.attr("y", 0);
-                sundays.attr("width", daysToPixels(1, xScale));
-                sundays.attr("height", height);
-            };
-            backgroundFill(d3.time.sunday.utc.range, "sundayBackground");
-            backgroundFill(d3.time.saturday.utc.range, "saturdayBackground");
-
-
-
-
-            var tasks = tasksGroup.selectAll("rect.taskRange")
-                .data(data);
-
-            tasks.enter()
-                .append("rect")
-                .attr("class", "taskRange");
-
-            tasks.exit().remove();
-
-            var text = tasksGroup.selectAll("text.taskName")
-                .data(data);
-
-            text.enter()
-                .append("text")
-                .attr("class", "taskName");
-
-            text.exit().remove();
-
-            //ズーム
-            svg.select(".x.axis").call(xAxis)
-                        .call(adjustTextLabels);
-
-            svg.select(".x.monthAxis").call(monthAxis);
-
-            //タスク表示
-            tasks.attr("x", function (item) {
-                return xScale(item.start);
-            }).attr("y", function (item, i) {
-                return i * 30 + 20
-            }).attr("width", function (item) {
-                return Math.abs(xScale(item.end) - xScale(item.start));
-            }).attr("height", 10);
-
-            //タスクのラベル表示
-            text.text(function (item) {
-                return item.name
-            })
-                .attr("text-anchor", "end")
-                .attr("x", function (item) {
-                    return xScale(item.start) - 10
-                })
-                .attr("y", function (item, i) {
-                    return i * 30 + 30
-                });
-        };
 
         //ズーム範囲設定
         var zoom = d3.behavior.zoom()
@@ -170,45 +177,56 @@ Vue.component("gantt", {
             .scale(0.5)
             .scaleExtent([0.3, 10])
             .on("zoom", function () {
-                update(self.tasks);
+                self.update(_data);
             });
 
         //SVG生成
-        var svg = d3.select(".ganttGraph").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
+        _svg = d3.select(".ganttGraph").append("svg")
+            .attr("width", _width + margin.left + margin.right)
+            .attr("height", _height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
             .call(zoom);//zoom関数に引数付きでセレクションを渡す
 
         //ズーム当たり判定
-        svg.append("rect")
-            .attr("width", width)
-            .attr("height", height);
+        _svg.append("rect")
+            .attr("width", _width)
+            .attr("height", _height);
 
         //X軸目盛り追加
-        svg.append("g")
+        _svg.append("g")
             .attr("class", "x axis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(xAxis)
+            .attr("transform", "translate(0," + _height + ")")
+            .call(_xAxis)
             .call(adjustTextLabels);
 
-        svg.append("g")
+        _svg.append("g")
             .attr("class", "x monthAxis")
-            .attr("transform", "translate(0," + height + ")")
-            .call(monthAxis);
+            .attr("transform", "translate(0," + _height + ")")
+            .call(_monthAxis);
 
-        weekendsGroup = svg.append("g")
+        _weekendsGroup = _svg.append("g")
             .attr("class", "weekends");
 
-        tasksGroup = svg.append("g")
+        _tasksGroup = _svg.append("g")
             .attr("class", "tasks");
 
-        addGradient(svg);
+        addGradient(_svg);
+    }
+}
 
-        this.$watch("tasks", function(tasks){
-            update(tasks);
+
+Vue.component("gantt", {
+    template: "<div class='ganttGraph'>",
+    props: ["tasks"],
+    ready: function () {
+        var self = this;
+
+        var mychart = new chart();
+        mychart.initialize();
+        this.$watch("tasks", function (tasks) {
+            mychart.update(tasks);
         }, false, true);
-        
+
     }
 });
