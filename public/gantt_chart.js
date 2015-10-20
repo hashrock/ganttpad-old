@@ -56,19 +56,19 @@ module.exports = function(){
     
     this.update = function () {
         var backgroundFill = function (range, className) {
-            var sundays = _weekendsGroup.selectAll("rect." + className)
+            var days = _weekendsGroup.selectAll("rect." + className)
                 .data(range(_xScale.invert(0), _xScale.invert(_width)));
-            sundays.enter()
+            days.enter()
                 .append("rect")
                 .attr("class", className);
 
-            sundays.exit().remove();
-            sundays.attr("x", function (item) {
+            days.exit().remove();
+            days.attr("x", function (item) {
                 return _xScale(item);
             });
-            sundays.attr("y", 0);
-            sundays.attr("width", daysToPixels(1, _xScale));
-            sundays.attr("height", _height);
+            days.attr("y", 0);
+            days.attr("width", daysToPixels(1, _xScale));
+            days.attr("height", _height);
         };
         backgroundFill(d3.time.sunday.utc.range, "sundayBackground");
         backgroundFill(d3.time.saturday.utc.range, "saturdayBackground");
