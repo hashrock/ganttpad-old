@@ -1,10 +1,10 @@
 var Vue = require("vue");
 require("./gantt.js");
 var moment = require("moment");
-var request = require("superagent");
 var _ = require("lodash");
 var Router = require('director').Router;
 var router = new Router();
+var postResource = require("./lib/post_resource.js");
 
 function sample() {
     return [
@@ -86,17 +86,14 @@ var app = new Vue({
         createPost: function (textdata) {
             var title = prompt("Title");
             if (title) {
-                request
-                    .post("/api")
-                    .type('form')
-                    .send({ title: title, contents: textdata })
-                    .end(function (err, res) {
-                        if (err) {
-                            alert(err);
-                        }
-                        var _id = res.body.posted._id;
-                        router.setRoute('/' + _id);
-                    });
+                var item = { title: title, contents: textdata };
+                postResource.create(item, function(err, res){
+                    if (err) {
+                        alert(err);
+                    }
+                    var _id = res.body.posted._id;
+                    router.setRoute('/' + _id);
+                })
             }
         },
         savePost: function () {
@@ -116,13 +113,12 @@ var app = new Vue({
         },
         listPosts: function () {
             var self = this;
-            request.get("/api", function (err, res) {
+            postResource.fetchList(function (err, res) {
                 if (err) {
                     alert(err);
                 }
                 self.posts = res.body;
             })
-
         }
     },
     ready: function () {
@@ -131,7 +127,7 @@ var app = new Vue({
 
         this.message = "Loading ...";
         router.on('/:id', function (id) {
-            request.get("/api/" + id, function (err, res) {
+            postResource.fetch(id, function(err, res){
                 if (err) {
                     alert(err);
                 }
@@ -170,19 +166,16 @@ var save = function () {
         console.log("Editing undefined!");
         return;
     }
-    request
-        .put("/api/" + self.editing._id)
-        .type('form')
-        .send({ title: self.editing.title, contents: self.editing.contents })
-        .end(function (err, res) {
-            if (err) {
-                alert(err);
-            }
-            backup(self.editing);
-            self.saved = true;
-            console.log("saved");
-        });
-
+    
+    var item = { title: self.editing.title, contents: self.editing.contents };
+    postResource.update(self.editing._id, item, function (err, res) {
+        if (err) {
+            alert(err);
+        }
+        backup(self.editing);
+        self.saved = true;
+        console.log("saved");
+    });
 }
 
 var autoSave = _.debounce(function () {
