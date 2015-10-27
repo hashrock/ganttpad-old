@@ -130,8 +130,46 @@ article{
 	box-shadow:rgba(113, 135, 164, 0.65098) 0px 0px 6px 3px;
 	border-radius: 5px;
 }
+
 .help__container{
 	padding: 20px;
+}
+
+.projectSetting{
+	position: absolute;
+	top: 20px;
+	left: 20px;
+	right: 20px;
+	bottom: 20px;
+	background: #fff;
+	box-shadow:rgba(113, 135, 164, 0.65098) 0px 0px 6px 3px;
+	border-radius: 5px;
+	display: flex;
+}
+
+.projectSetting__container{
+	padding: 20px;
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.projectSetting__container h1{
+	text-align: center;
+}
+
+
+.projectSetting__container__form{
+	flex: 1;
+}
+
+.projectSetting__container__form__rename{
+	padding: 8px;
+}
+
+.projectSetting__container__nav{
+	height: 2rem;
+	text-align: center;
 }
 
 .nav__postItem{

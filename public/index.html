@@ -23,7 +23,7 @@
                 <textarea v-model="editing.contents" v-on="keyup: update(editing.contents)"></textarea>
                 <div class="container-lower__menus">
                     <button class="container-lower__help ghost-button" v-on="click: showHelp = true">Help</button>
-                    <button class="container-lower__create ghost-button">&nbsp;</button>
+                    <button class="container-lower__create ghost-button" v-on="click: openProjectSetting">Setting</button>
                     <button class="container-lower__open ghost-button">&nbsp;</button>
                     <button class="container-lower__save ghost-button" v-on="click: savePost" v-attr="disabled: saved" v-text="saveButtonLabel"></button>
                 </div>
@@ -45,6 +45,23 @@
                     </p>
                 </div>
             </div>
+            
+            <div v-if="showProjectSetting" class="projectSetting" v-cloak>
+                <div class="projectSetting__container">
+                    <div class="projectSetting__container__form">
+                        <h1>Project Setting</h1>
+                        <h2>Rename Project</h2>
+                        <input class="projectSetting__container__form__rename" v-model="rename" type="text">
+                        <button class="ghost-button" v-on="click: renamePost">Rename</button>
+                        <h2>Delete Project</h2>
+                        <button class="projectSetting__container__form__delete ghost-button" v-on="click: deletePost">Delete</button>
+                    </div>
+                    
+                    <div class="projectSetting__container__nav">
+                        <button class="ghost-button" v-on="click: showProjectSetting = false">Close</button>
+                    </div>
+                </div>
+            </div>            
 
         </article>
     </div>

@@ -26,6 +26,8 @@ function sample() {
     }).join("\r\n");
 }
 
+var autoSave;
+
 var app = new Vue({
     el: "#main",
     data: {
@@ -37,6 +39,7 @@ var app = new Vue({
         tasks: [],
         saved: false,
         showHelp: false,
+        showProjectSetting: false,
         message: ""
     },
     computed: {
@@ -96,10 +99,24 @@ var app = new Vue({
                 })
             }
         },
+        openProjectSetting: function(){
+            console.log("OpenProjectSetting");
+            this.rename = "" + this.editing.title;
+            this.showProjectSetting = true;
+        },
+        renamePost: function(){
+            //this.editing.title = "" + this.rename;
+            //this.saveEditing();
+            //this.listPosts();
+            
+        },
+        deletePost: function(){
+            
+        },
         savePost: function () {
             if (this.editing._id) {
                 console.log(this.editing._id);
-                save();
+                this.saveEditing();
             } else {
                 this.createPost(this.editing.contents);
             }
@@ -119,6 +136,31 @@ var app = new Vue({
                 }
                 self.posts = res.body;
             })
+        },
+        saveEditing: function(){
+            var self = this;
+            if (!self.editing._id) {
+                return;
+            }
+            if (!self.editing) {
+                console.log("Editing undefined!");
+                return;
+            }
+            
+            var item = { title: self.editing.title, contents: self.editing.contents };
+            postResource.update(self.editing._id, item, function (err, res) {
+                if (err) {
+                    alert(err);
+                }
+                self.backup(self.editing);
+                self.saved = true;
+                console.log("saved");
+            });
+        },
+        backup: function(editing){
+            lastContents = editing.contents;
+            lastTitle = editing.title;
+            this.saved = true;
         }
     },
     ready: function () {
@@ -133,7 +175,7 @@ var app = new Vue({
                 }
                 self.message = "";
                 self.editing = res.body;
-                backup(self.editing);
+                self.backup(self.editing);
                 self.update(self.editing.contents);
                 self.listPosts();
             })
@@ -145,44 +187,16 @@ var app = new Vue({
             self.message = "";
         })
         router.init('/')
+        
+        autoSave = _.debounce(function () {
+            if (lastTitle === self.editing.title && lastContents === self.editing.contents) {
+                return;
+            }
+            self.saveEditing();
+        }, 2000);
     }
 });
 
-function backup(editing) {
-    lastContents = editing.contents;
-    lastTitle = editing.title;
-    app.$data.saved = true;
-}
 
 var lastTitle = "";
 var lastContents = "";
-
-var save = function () {
-    var self = app.$data;
-    if (!self.editing._id) {
-        return;
-    }
-    if (!self.editing) {
-        console.log("Editing undefined!");
-        return;
-    }
-    
-    var item = { title: self.editing.title, contents: self.editing.contents };
-    postResource.update(self.editing._id, item, function (err, res) {
-        if (err) {
-            alert(err);
-        }
-        backup(self.editing);
-        self.saved = true;
-        console.log("saved");
-    });
-}
-
-var autoSave = _.debounce(function () {
-    var self = app.$data;
-    if (lastTitle === self.editing.title && lastContents === self.editing.contents) {
-        return;
-    }
-    save();
-}, 2000);
-
