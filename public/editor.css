@@ -6,6 +6,8 @@ html, body{
 }
 #main{
 	height: 100%;
+	display: -ms-flexbox;
+	display: -webkit-flex;
 	display: flex;
 }
 
@@ -45,56 +47,81 @@ nav h2 button:active {
 
 article{
 	height: 100%;
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
+	display: -ms-flexbox;
+	display: -webkit-flex;
 	display: flex;
-	flex-direction: column;
+	-ms-flex-direction: column;
+	    -webkit-flex-direction: column;
+	        flex-direction: column;
 }
 
 .container-upper{
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 	position: relative;
 }
 .container-lower{
-	flex: 0.5;
+	-ms-flex: 0.5;
+	    -webkit-flex: 0.5;
+	        flex: 0.5;
+	display: -ms-flexbox;
+	display: -webkit-flex;
 	display: flex;
 }
 .container-lower textarea{
 	padding: 10px;
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 	border: none;
 	overflow: auto;
 	outline: none;
 	font-size: 0.8rem;
-
-	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
 	box-shadow: none;
 	background: #333;
 	color: white;   
 }
 
 .container-lower__menus{
+	display: -ms-flexbox;
+	display: -webkit-flex;
 	display: flex;
-	flex-direction: column;
+	-ms-flex-direction: column;
+	    -webkit-flex-direction: column;
+	        flex-direction: column;
 	width: 100px;
 	background: black;
 }
 .container-lower__help{
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 }
 
 .container-lower__create{
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 }
 .container-lower__open{
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 }
 
 .container-lower__dummy{
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 }
 .container-lower__save{
-	flex: 1;
+	-ms-flex: 1;
+	    -webkit-flex: 1;
+	        flex: 1;
 }
 .container-lower__save:disabled{
 	opacity: 0.5;

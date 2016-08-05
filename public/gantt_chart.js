@@ -179,7 +179,7 @@ module.exports = function(){
         var zoom = d3.behavior.zoom()
             .x(_xScale)
             .scale(0.5)
-            .scaleExtent([0.3, 10])
+            .scaleExtent([0.2, 10])
             .on("zoom", function () {
                 self.update();
             });
